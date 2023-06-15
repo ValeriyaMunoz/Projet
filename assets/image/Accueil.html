@@ -1,0 +1,122 @@
+
+<!-- saved from url=(0052)http://localhost/projet/index.php?p=supprimer_compte -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body>$2y$10$kwEnNZS/k3jXjEF889OqEO3wVn1y3RuUqakn7xj91OrEo5Egr2K.i1Saisissez le mot de passe correctsupprimer_compte
+
+
+
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link>
+    <link rel="stylesheet" href="./Accueil_files/style.css" type="text/css">
+    <style>
+     @import url('https://fonts.googleapis.com/css2?family=Exo:wght@200&display=swap');
+    </style>
+    <link rel="stylesheet" href="./Accueil_files/bootstrap.min.css">
+    <title>Accueil</title>
+
+
+
+    <div id="header">
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+            <h5 class="my-0 mr-md-auto font-weight-normal"><img src="./Accueil_files/logo.jpg" width="200px"></h5>
+            <nav class="my-2 my-md-0 mr-md-3">
+            <a class=" p-2 text-dark" id="deposer" href="http://localhost/projet/annonce.php" name="annonce">DEPOSER UNE ANNONCE</a>
+            <a class="p-2 text-dark" href="http://localhost/projet/categorie.php" name="jeux">JOUET&amp;JEUX</a>
+            <a class="p-2 text-dark" href="http://localhost/projet/categorie.php" name="habillement">HABILLEMENT</a>
+            <a class="p-2 text-dark" href="http://localhost/projet/categorie.php" name="maison">MAISON ET CUISINE</a>
+            <a class="p-2 text-dark" href="http://localhost/projet/categorie.php" name="electronique">ELECTRONIQUE</a>
+            <input class="form-control rounded" type="search" placeholder="Effectuez une recherche" aria-label="Search" aria-describedby="search-addon">
+            <button class="btn btn-outline-primary" type="submit">RECHERCHER</button>
+
+
+    
+    <div id="right_buttons" class="deconnection">
+        <input type="hidden" name="action" value="deconnect">
+        <a class="btn btn-outline-primary" href="http://localhost/projet/index.php?p=deconnect" tardet="_blank">SE DECONNECTER</a>
+    </div>
+
+        <a href="http://localhost/projet/index.php?p=panier.php">
+        <button class="btn btn-outline-primary" type="submit" tardet="_blank">PANIER</button>
+        </a>
+        
+        <a href="http://localhost/projet/index.php?p=favoris.php">
+        <button class="btn btn-outline-primary" type="submit" tardet="_blank">FAVORIS</button>
+        </a>
+
+        <a href="http://localhost/projet/index.php?p=message.php">
+        <button class="btn btn-outline-primary" type="submit" tardet="_blank">MESSAGE</button>
+        </a>
+           <!--<button class="btn btn-outline-primary" type="submit" tardet="_blank"><img src=assets/image/panier.jpg alt="PANIER" width="30px"></button>
+  <form method="post" action="index.php?p=favoris.php">
+            <div id="panier">
+            <input type="hidden" name="action" value="panier" >
+            <button class="btn btn-outline-primary" type="submit" tardet="_blank"><img src=image/panier.jpg alt="PANIER" width="30px"></button>
+            </div>
+    </form>
+    <form method="post" action="index.php?p=favoris.php">
+            <div id="favoris">
+            <input type="hidden" name="action" value="favoris" >
+            <button class="btn btn-outline-primary" type="submit"  tardet="_blank"><img src=image/favoris.png alt="FAVORIS" width="30px"></button>
+            </div>
+    </form>
+    </form method="post" action="index.php?p=message.php">
+            <div id="message">
+            <input type="hidden" name="action" value="message" >
+            <button class="btn btn-outline-primary" type="submit" tardet="_blank"><img src=image/message.png alt="MESSAGE" width="30px"></button>
+            </div>
+    </form>-->
+
+   </nav>
+  </div>
+</div>
+
+<section>
+  <div class="container py-5">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="http://localhost/projet/index.php?p=mes_annonces">MES ANNONCES</a></li>
+            <li class="breadcrumb-item"><a href="http://localhost/projet/index.php?p=messagerie">MESSAGERIE</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="http://localhost/projet/index.php?p=account">PROFILE</a></li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+ 
+ <form method="POST" action="http://localhost/projet/index.php?p=supprimer_compte" class="container">
+   <input type="hidden" name="action" value="supprimer_compte">
+    <h2>SUPPRESSION DE COMPTE</h2>
+       <p>Pour supprimer votre compte, vous devez entrer votre mot de passe</p>
+        <div class="form-label-group">
+            <input type="password" name="pwd" id="inputPassword" required="" class="form-control" placeholder="Mot de passe" pattern="/^(?=.*\d)(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*?[!?@#$&amp;*^=+-]).{8,}$/" title="Le mot de passe doit comporter au moins 8 caractères dont au moins 1 chiffre, 1 minuscule, 1 majuscule et 1 caractère spécial">
+        </div>
+ 
+      <button class="btn btn-lg btn-primary btn-block" type="submit">SUPPRIMER</button>
+  
+  </form>
+<footer class="container pt-4 my-md-5 pt-md-5 border-top">
+      <div class="row">
+          <div class="col-6 col-md">
+            <h5>AIDE</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="http://localhost/projet/index.php?p=message_admin">AIDE</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5>POLITIQUES</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="http://localhost/projet/POLITIQUE_DE_CONFIDENTIALITE.pdf" name="politiques">POLITIQUE DE CONFIDENTIALITÉ</a></li>
+              <li><a class="text-muted" href="http://localhost/projet/CONDITIONS_D_ACHAT.pdf" name="politiques">CONDITIONS D´ACHAT</a></li>
+              <li><a class="text-muted" href="http://localhost/projet/CONFIGURATION_DES_COOKIES.pdf" name="politiques">CONFIGURATION DES COOKIES</a></li>
+            </ul>
+          </div>
+         
+        </div>
+    
+
+</footer>
+
+</div></section></body></html>

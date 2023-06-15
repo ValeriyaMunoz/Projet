@@ -1,0 +1,82 @@
+*{
+    font-family: 'Exo', sans-serif;
+    margin:0;
+    padding: 0;
+    
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+div {
+    display: block;
+}
+
+.messageAdmin{
+    top:200px;
+    position:relative;
+
+}
+#annonces2{
+    width: 45%;
+    margin-left: 1%
+}
+.card {
+    width: 32%;
+    margin-left: 1%
+}
+#header{
+    position:relative;
+    height: 50%;
+}
+#right_buttons a,#right_buttons button{
+    position:absolute;
+    top: 20px;
+    right: 10px;
+
+}
+
+#header a{
+    text-decoration: none;
+}
+footer a{
+    text-decoration: none;
+}
+.search, .connection,.deconnection,#panier,#favoris,#message{
+    position:absolute;
+    float: right;
+    
+}
+.annonce a, .categorie a{
+    position:absolute;
+    color:rgb(0, 0, 0);
+    float: right;
+}
+
+.annonce a, .categorie a:visited{
+    color:rgb(4, 66, 66);
+}
+.search{
+    height: 20px;
+    width: 30px;
+    border-radius: 5px;
+}
+.categorie{
+    border-spacing: 50px;
+
+}
+.footer{
+    position: absolute;
+    flex:0 0 auto;
+    border-top:2px solid rgb(69, 67, 67);
+}
+.card-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: rgba(0, 0, 0, .03);
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
+}
+
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+
