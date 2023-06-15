@@ -12,7 +12,7 @@ class AnnonceModel{
         global $db;
         /*$db->test();
         die;*/
-        $query=$db->prepare('SELECT * FROM '.$this->table.' ORDER BY '.$orderby);
+        $query=$db->prepare('SELECT * FROM '. $this->table .' ORDER BY '.$orderby);
         $query->execute();
         if ($query->rowCount()){
             // Renvoie toutes les infos de l'annonce
@@ -103,14 +103,16 @@ class AnnonceModel{
     return false;
 
   }
-  function creeNouvelleAnnonce($titre,$description,$prix,$ville,$statut_echange_ou_paiement){
+  function creeNouvelleAnnonce($idMembre,$titre,$description,$prix,$ville,$statut_echange_ou_paiement){
 
   try{
 
     //$db = connect();
       global $db;
-    $query=$db->prepare('INSERT INTO '.$this->table.' ( titre, description, prix, ville, statut_echange_ou_paiement) VALUES (:titre,:description,:prix,:ville,:statut_echange_ou_paiement)');
-    $query->execute(['titre'=>$titre, 'description'=>$description, 'prix'=>$prix, 'ville'=>$ville, 'statut_echange_ou_paiement'=>$statut_echange_ou_paiement]); 
+    $query=$db->prepare('INSERT INTO '.$this->table.' ( titre, description, prix, statut_echange_ou_paiement, ville, idMembre) VALUES (:titre,:description,:prix,:statut_echange_ou_paiement,:ville,:idMembre) ');
+    $query->execute(['titre'=>$titre, 'description'=>$description, 'prix'=>$prix, 'ville'=>$ville, 'statut_echange_ou_paiement'=>$statut_echange_ou_paiement, 'idMembre'=>$idMembre]); 
+    $last_id=$db->lastInsertId();
+    return $last_id;
     
 } catch (Exception $e) {
   echo $e->getMessage();

@@ -248,16 +248,14 @@ if(isset($_FILES['url_photo_profil'])){
             //unlink($user->getUrl_photo_profil());
           
             $old_name=$_FILES['url_photo_profil']['name'];
-   //print_r($old_name);
+ 
             $new_name="AvatarID".$id.".jpg";
-   //print_r($new_name);
+   
             $url_photo_profil="assets/image_profil/".basename($new_name);
             //enregistrement du ficher
             move_uploaded_file($_FILES['url_photo_profil']['tmp_name'],$url_photo_profil);
-           //rename($old_name,$new_name);
-            //$url_photo_profil="assets/image_profil/".basename($new_name);
-            //print_r($url_photo_profil);
-            echo"coucou";
+         
+            
            
         }else{
              $photo_default="assets/image_profil/avatar.jpg";

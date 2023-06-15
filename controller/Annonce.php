@@ -105,19 +105,18 @@ if(!empty($_POST)){
                         }
 
 
-        $nouvelle_annonce=$AnnonceModel->creeNouvelleAnnonce($id,$titre,$description,$prix,$ville,$statut_echange_ou_paiement);
-       //print_r($nouvelle_annonce);
+        $idAnnonce=$AnnonceModel->creeNouvelleAnnonce($id,$titre,$description,$prix,$ville,$statut_echange_ou_paiement);
+        
 
-       $idAnnonce=
-                       
-                        print_r($_FILES);
+              
+                        //print_r($_FILES);
                           if(isset($_FILES['file'])){
                             foreach($_FILES['file']['error'] as $k=>$error){
                             //Si le fichier a bien été téléchargé et qu'il n'y a pas eu d'erreur
                                 if ($error == UPLOAD_ERR_OK && is_uploaded_file($_FILES['file']['tmp_name'][$k])) {
                                     $old_name=$_FILES['file']['name'][$k];
                                     $new_name="ID_user".$id."Annonce-".$titre."-".$k.".jpg";
-                                    print_r($new_name);
+                                    //print_r($new_name);
                                     //rename($old_name,$new_name);
                                     $fichier_chemin="assets/image_user/".basename($new_name);
                                     //print_r($fichier_chemin);
@@ -129,9 +128,9 @@ if(!empty($_POST)){
                                     }else{
                                      $is_main_photo=0;   
                                     }
-                                   echo $is_main_photo;
+                                   
                                     
-         $nouvelle_annonce_photo=$AnnonceModel->creeNouvelleAnnoncePhoto($$idAnnonce,$fichier_chemin,$is_main_photo);
+         $nouvelle_annonce_photo=$AnnonceModel->creeNouvelleAnnoncePhoto($idAnnonce,$fichier_chemin,$is_main_photo);
     //print_r($fichier_chemin);      
                                 }else{
                                      echo "Mauvais format de la photo téléchargée";
