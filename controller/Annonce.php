@@ -15,10 +15,14 @@ class Annonce
   private $prix;
   private $photo;
   private $statut_echange_ou_paiement;
+  private $Statut_annonce_validee_bloque;
 
 
   // Des functions getter et setter
-   public function getStatut(){
+   public function getStatut_annonce_validee_bloque(){
+    return $this->Statut_annonce_validee_bloque;
+  }
+  public function getStatut(){
     return $this->statut_echange_ou_paiement;
   }
   public function getId(){
@@ -57,10 +61,52 @@ class Annonce
     $this->title=$annonce[$num_annonce]['titre'];
     $this->description=$annonce[$num_annonce]['description'];
     $this->prix=$annonce[$num_annonce]['prix'];
+    $this->Statut_annonce_validee_bloque=[$num_annonce]['Statut_annonce_validee_bloque'] ?? 4;
     $photo=$AnnonceModel->getMainPhoto($this->id);
     $this->photo=$photo['fichier_chemin'];
+   
+    //ptint_r($photo);
  
   }
+// charger des annonce user dans la page Mes Annonce
+    public function chargerAnnonceUser($id,$orderby, $num_annonce){
+    $AnnonceModel=new AnnonceModel();
+    //print_r($num_annonce);
+    $annonce=$AnnonceModel->getAnnoncebyIdUser($id,$orderby);
+    //print_r($annonce);
+    $this->id=$annonce[$num_annonce]['id'];
+    $this->title=$annonce[$num_annonce]['titre'];
+    $this->description=$annonce[$num_annonce]['description'];
+    $this->prix=$annonce[$num_annonce]['prix'];
+    $this->Statut_annonce_validee_bloque=$annonce[$num_annonce]['Statut_annonce_validee_bloque'];
+    $this->photo[] = $AnnonceModel->getPhotobyId($this->id);
+   
+   
+    //ptint_r($photo);
+ 
+  }
+
+function StatutAnnonce($statut){
+ 
+    switch ($statut) 
+        {
+
+            case "1":
+            return "If faut modifier";
+            break;
+            case "2":
+             return "Validée";
+            break;
+            case "3":
+             return "Bloqué";
+            break;
+            case "4":
+             return "En attente de validation";
+            break;
+}
+}
+
+
   //chargement d'annonce dans la page d'annonce_detail by Id
   public function chargerAnnonceById($idannonce){
     $AnnonceModel=new AnnonceModel();
@@ -71,6 +117,7 @@ class Annonce
     $this->prix=$annonce['prix'];
     $this->photo[] = $AnnonceModel->getPhotobyId($idannonce);
     $this->statut_echange_ou_paiement=$annonce['statut_echange_ou_paiement'];
+    $this->Statut_annonce_validee_bloque=$annonce['Statut_annonce_validee_bloque'];
   }
 
 
@@ -103,9 +150,12 @@ if(!empty($_POST)){
                         $statut_echange_ou_paiement=0;
                         break;
                         }
+      
+       $date_de_creation=date('Y-m-j H:i:s');
+        //$date_de_creation=$datetime->date;
+    
 
-
-        $idAnnonce=$AnnonceModel->creeNouvelleAnnonce($id,$titre,$description,$prix,$ville,$statut_echange_ou_paiement);
+        $idAnnonce=$AnnonceModel->creeNouvelleAnnonce($id,$titre,$description,$prix,$ville,$statut_echange_ou_paiement,$date_de_creation);
         
 
               
@@ -115,14 +165,17 @@ if(!empty($_POST)){
                             //Si le fichier a bien été téléchargé et qu'il n'y a pas eu d'erreur
                                 if ($error == UPLOAD_ERR_OK && is_uploaded_file($_FILES['file']['tmp_name'][$k])) {
                                     $old_name=$_FILES['file']['name'][$k];
-                                    $new_name="ID_user".$id."Annonce-".$titre."-".$k.".jpg";
+                                    $new_name="ID_user".$id."Annonce-".$idAnnonce."-".$k.".jpg";
+                                    $image= new Imagick($new_name);
+                                    $image->adaptativeResizeImage(1024,768);
+                                
                                     //print_r($new_name);
                                     //rename($old_name,$new_name);
                                     $fichier_chemin="assets/image_user/".basename($new_name);
                                     //print_r($fichier_chemin);
                                     //enregistrement du ficher
                                     move_uploaded_file($_FILES['file']['tmp_name'][$k],$fichier_chemin);
-                                   
+                                    
                                     if($k==0){
                                     $is_main_photo=1;
                                     }else{
@@ -158,6 +211,13 @@ if(!empty($_POST)){
 }
 }
 
+
+function SupprimerAnnonceOui(){
+$AnnonceModel=new AnnonceModel();
+$idAnnonce=$_SESSION['idAnnonce'];
+$AnnonceModel->SupprimerAnnonce($idAnnonce);
+
+}
  /*public function testjson()
     {
         // si on souhaite gérer des appels AJAX, on peut directement renvoyer du JSON, sans avoir besoin d'une vue

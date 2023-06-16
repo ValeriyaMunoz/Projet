@@ -87,7 +87,16 @@ try
 
 
  // Activation de l'enregistrement par lien, desactivation et lien vers récuperation du mot de passe
-if ($page=='activation'){
+if ($page=='non_supprimer'){
+   $page="mes_annonces";
+}
+if ($page=='oui_supprimer'){
+   $idAnnonce=$_SESSION['idAnnonce'];
+  $act=$annonce->SupprimerAnnonceOui( $idAnnonce); 
+  $page="mes_annonces";
+}
+
+ if ($page=='activation'){
   $act=$UserModel->activUser();
 }
 

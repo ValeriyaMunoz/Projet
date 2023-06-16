@@ -50,19 +50,19 @@ if(!isset($_SESSION['actif']) || $_SESSION['actif']==0){?>
         <a class="btn btn-outline-primary" href="?p=deconnect"  tardet="_blank">SE DECONNECTER</a>
     </div>
 
-        <a href ="index.php?p=panier">
+        <a href ="?p=panier">
         <button class="btn btn-outline-primary" type="submit" tardet="_blank">PANIER</button>
         </a>
         
-        <a href ="index.php?p=favoris">
+        <a href ="?p=favoris">
         <button class="btn btn-outline-primary" type="submit" tardet="_blank">FAVORIS</button>
         </a>
 
-        <a href ="index.php?p=account">
+        <a href ="?p=account">
         <button class="btn btn-outline-primary" type="submit" tardet="_blank">MON COMPTE</button>
         </a>
 
-        <a href ="index.php?p=home">
+        <a href ="?p=home">
         <button class="btn btn-outline-primary" type="submit" tardet="_blank">ANNONCES</button>
         </a>
 

@@ -52,8 +52,8 @@ class AnnonceModel{
     try {
         //$db = connect();
       global $db;
-        $query=$db->prepare('SELECT * FROM '.$this->table.' where id='.$idannonce);
-        $query->execute();
+        $query=$db->prepare('SELECT * FROM '.$this->table.' where id=:id');
+        $query->execute(['id'=>$idannonce]);
         if ($query->rowCount()){
             // Renvoie toutes les infos de l'Annonce
             return $query->fetch();
@@ -63,6 +63,8 @@ class AnnonceModel{
     }
     return false;
   }
+
+
 
   //Affiche toutes les photos d'annonce.Utilise pour afficher les détails de l'annonce.
 
@@ -103,14 +105,55 @@ class AnnonceModel{
     return false;
 
   }
-  function creeNouvelleAnnonce($idMembre,$titre,$description,$prix,$ville,$statut_echange_ou_paiement){
+
+  function CountAnnoncebyID($idMembre){ 
+      try {
+        //$db = connect();
+      global $db;
+        $query=$db->prepare('SELECT COUNT(id) FROM '.$this->table.' WHERE idMembre=:idMembre');
+        $query->execute(['idMembre'=>$idMembre]);
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'Annonce
+            $result=$query->fetch();
+            return $result[0];
+
+        }
+      } catch (Exception $e) {
+        echo $e->getMessage();
+      }
+    return false;
+
+  }
+
+function getAnnoncebyIdUser($id,$orderby){
+
+try {
+        //$db = connect();
+        global $db;
+        /*$db->test();
+        die;*/
+        $query=$db->prepare('SELECT * FROM '. $this->table .' WHERE idMembre=:idMembre ORDER BY '.$orderby);
+        $query->execute(['idMembre'=>$id]);
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'annonce
+
+            return $query->fetchAll();
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+    return false;
+
+  
+}
+  function creeNouvelleAnnonce($idMembre,$titre,$description,$prix,$ville,$statut_echange_ou_paiement,$date_de_creation){
 
   try{
 
     //$db = connect();
       global $db;
-    $query=$db->prepare('INSERT INTO '.$this->table.' ( titre, description, prix, statut_echange_ou_paiement, ville, idMembre) VALUES (:titre,:description,:prix,:statut_echange_ou_paiement,:ville,:idMembre) ');
-    $query->execute(['titre'=>$titre, 'description'=>$description, 'prix'=>$prix, 'ville'=>$ville, 'statut_echange_ou_paiement'=>$statut_echange_ou_paiement, 'idMembre'=>$idMembre]); 
+    $query=$db->prepare('INSERT INTO '.$this->table.' ( titre, description, prix, statut_echange_ou_paiement, ville, idMembre, date_de_creation) VALUES (:titre,:description,:prix,:statut_echange_ou_paiement,:ville,:idMembre,:date_de_creation) ');
+    $query->execute(['titre'=>$titre, 'description'=>$description, 'prix'=>$prix, 'ville'=>$ville, 'statut_echange_ou_paiement'=>$statut_echange_ou_paiement, 'idMembre'=>$idMembre, 'date_de_creation'=>$date_de_creation]); 
     $last_id=$db->lastInsertId();
     return $last_id;
     
@@ -137,5 +180,22 @@ try{
     return false;  
 }
 
+  function SupprimerAnnonce($idAnnonce){
+  try{
+
+    //$db = connect();
+      global $db;
+    $query=$db->prepare('DELETE FROM '.$this->table.' WHERE id=:id LIMIT 1');
+    $query->execute(['id'=>$idAnnonce]); 
+    
+} catch (Exception $e) {
+  echo $e->getMessage();
+ }
+    return false;  
 
 }
+  
+    
+  }
+
+
