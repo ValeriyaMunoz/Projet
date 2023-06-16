@@ -1,4 +1,7 @@
+<?php
+$id=$_SESSION['id'];
 
+?>
 <section>
   <div class="container py-5">
     <div class="row">
@@ -64,10 +67,12 @@
 		              <input id="ville" class="form-control" type="text" name="ville" placeholder="Entrer votre ville">
 		            </div>
 	
-		          
+		     
 		    <div class="form-group">
+			<input type="hidden" name="idannonce" value="<?php echo $id;?>">
 		      <button class="btn btn-primary" type="submit">DEPOSER</button>
 		</div>
+
 	</div>
 			</div>
 </form>

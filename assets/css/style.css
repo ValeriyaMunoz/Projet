@@ -5,11 +5,17 @@
     padding: 0;
     
 }
+
 *, ::after, ::before {
     box-sizing: border-box;
 }
 div {
     display: block;
+}
+
+img {
+    width: 150px;
+    height: 150px;
 }
 
 .messageAdmin{
@@ -27,7 +33,7 @@ div {
 }
 #header{
     position:relative;
-    height: 50%;
+    height: 35%;
 }
 #right_buttons a,#right_buttons button{
     position:absolute;

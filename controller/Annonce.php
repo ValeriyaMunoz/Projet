@@ -121,10 +121,8 @@ function StatutAnnonce($statut){
   }
 
 
-function CreeAnnonce(){
-    $id=$_SESSION['id'];
-    //$annonce= new Annonce();
-    //$annonce->chargerAnnonceById($id);
+function CreeAnnonce($id){
+
 $AnnonceModel=new AnnonceModel();
 if(!empty($_POST)){
         if(!empty($_POST["titre"]) && strlen($_POST["titre"])>=3){
@@ -166,8 +164,8 @@ if(!empty($_POST)){
                                 if ($error == UPLOAD_ERR_OK && is_uploaded_file($_FILES['file']['tmp_name'][$k])) {
                                     $old_name=$_FILES['file']['name'][$k];
                                     $new_name="ID_user".$id."Annonce-".$idAnnonce."-".$k.".jpg";
-                                    $image= new Imagick($new_name);
-                                    $image->adaptativeResizeImage(1024,768);
+                                    //$image= new Imagick($new_name);
+                                    //$image->adaptativeResizeImage(1024,768);
                                 
                                     //print_r($new_name);
                                     //rename($old_name,$new_name);
@@ -212,9 +210,9 @@ if(!empty($_POST)){
 }
 
 
-function SupprimerAnnonceOui(){
+function SupprimerAnnonceOui($idAnnonce){
 $AnnonceModel=new AnnonceModel();
-$idAnnonce=$_SESSION['idAnnonce'];
+//$idAnnonce=$_SESSION['idAnnonce'];
 $AnnonceModel->SupprimerAnnonce($idAnnonce);
 
 }

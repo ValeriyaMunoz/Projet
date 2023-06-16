@@ -10,7 +10,7 @@ $user->chargerAllInfoUserById($_SESSION['id']);
 
 ?>
 <section>
-  <div class="container py-5">
+  <div class="container">
     <div class="row">
       <div class="col">
         <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
@@ -22,25 +22,26 @@ $user->chargerAllInfoUserById($_SESSION['id']);
         </nav>
       </div>
     </div>
+  </div>
 </section>
+<div class="grid-container">
 <?php
    
    
     for($i=0;$i<=$nb_annonce-1;$i++):
         $annonce->chargerAnnonceUser($idMembre,"date_de_creation", $i);
         $photo=$annonce->getPhoto();
-     
        
     ?>
-        <div class="card mb-4 box-shadow-sm">
-          <div class="card-header">
+      <div class="grid-item">
+        
               <h4 class="my-0 font-weight-normal"><?php echo $annonce->getTitle(); ?></h4>
-              <div class="card-body">
+              
                 <?php
                 foreach($photo[$i] as $k=>$val){
-                 echo "<img src=".$val[0]." class='img_thumbnail'>";
-                  }
-                  ?>
+                  echo "<img src=".$val[0]." class='img_thumbnail'>";
+                }
+                ?>
                 
                 <p class=""><?php echo $annonce->getDescription() ?></p>
                 <p class=""><?php echo "Prix: ".$annonce->getPrix() ?></p>
@@ -48,7 +49,6 @@ $user->chargerAllInfoUserById($_SESSION['id']);
               $nb_statut=$annonce->getStatut_annonce_validee_bloque();
               $statut=$annonce->StatutAnnonce($nb_statut);   ?>
                <p>Statut de l'annonce:  <?php echo $statut ?? "à l'étude"; ?></p>
- 
             
          
             <form action="?p=modification_annonce" method= "get"> 
@@ -57,16 +57,15 @@ $user->chargerAllInfoUserById($_SESSION['id']);
               <button class="btn btn-outline-primary" type="submit" tardet="_blank">MODIFIER L'ANNONCE</button>
             </form>
           
-              <form action="?p=supprimer_annonce" method= "get"> 
+            <form action="?p=supprimer_annonce" method= "get"> 
                <input type="hidden" name="p" value="supprimer_annonce">  
               <input type="hidden" name="idAnnonce" value="<?php echo $annonce->getId();?>">
               <button class="btn btn-outline-primary" type="submit" tardet="_blank">SUPPRIMER L'ANNONCE</button>
-              </form>
-            
-          </div>
-          </div>
-
+            </form>
+      </div>
+              
         <?php endfor;?>
-  </div>
+</div>
+  
 
     	  

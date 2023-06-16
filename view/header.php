@@ -20,24 +20,43 @@
             <h5 class="my-0 mr-md-auto font-weight-normal"><img src="assets/image/logo.jpg" width=200px></h5>
             <nav class="my-2 my-md-0 mr-md-3">
             <a class=" p-2 text-dark" id="deposer" href="?p=cree_annonce" name="annonce">DEPOSER UNE ANNONCE</a>
+<?php
+    if(!isset($_SESSION['actif']) || $_SESSION['actif']==0){
+?>
+        <a class="btn btn-outline-primary" href="?p=connexion"  tardet="_blank" style="position: relative; float: right;">SE CONNECTER</a>
+        <a class="btn btn-outline-primary" href="?p=connexion"  tardet="_blank" style="position: relative; float: right;">CREER UN COMPTE</a>
+<?php 
+    }else{
+?>
+        <input type="hidden" name="action" value="deconnect" >
+        <a class="btn btn-outline-primary" href="?p=deconnect"  tardet="_blank" style="position: relative; float: right;">SE DECONNECTER</a>
+
+        <a href ="?p=account">
+        <button class="btn btn-outline-primary" type="submit" tardet="_blank" style="position: relative; float: right;">MON COMPTE</button>
+        </a>
+
+        
+        
+        
+<?php }
+?>
+<br><br>
+
+
+            <input class="form-control rounded" type="search" placeholder="Effectuez une recherche" aria-label="Search" aria-describedby="search-addon" />
+            <button class="btn btn-outline-primary" type="submit" >RECHERCHER</button>
+            <br>
             <a class="p-2 text-dark" href="?p=categorie_jeux" name="jeux">JOUET&JEUX</a>
             <a class="p-2 text-dark" href="?p=categorie_habillement" name="habillement">HABILLEMENT</a>
             <a class="p-2 text-dark" href="?p=categorie_maison"name="maison">MAISON ET CUISINE</a>
             <a class="p-2 text-dark" href="?p=categorie_electronique"name="electronique">ELECTRONIQUE</a>
-            <input class="form-control rounded" type="search" placeholder="Effectuez une recherche" aria-label="Search" aria-describedby="search-addon"/>
-            <button class="btn btn-outline-primary" type="submit" >RECHERCHER</button>
+            
 
 
     <?php
     //var_dump($_SESSION['actif']);
 if(!isset($_SESSION['actif']) || $_SESSION['actif']==0){?>
-     <div class="connection">
-    <a class="btn btn-outline-primary" href="?p=connexion"  tardet="_blank">CREER UN COMPTE</a>
-    </div>
-    <div class="connection">
-
-    <a class="btn btn-outline-primary" href="?p=connexion"  tardet="_blank">SE CONNECTER</a>
-    </div>
+    
 
     <a href ="index.php?p=home">
      <button class="btn btn-outline-primary" type="submit" tardet="_blank">ANNONCES</button>
@@ -45,10 +64,7 @@ if(!isset($_SESSION['actif']) || $_SESSION['actif']==0){?>
 
 <?php }else{?>
 
-    <div id="right_buttons" class="deconnection">
-        <input type="hidden" name="action" value="deconnect" >
-        <a class="btn btn-outline-primary" href="?p=deconnect"  tardet="_blank">SE DECONNECTER</a>
-    </div>
+    
 
         <a href ="?p=panier">
         <button class="btn btn-outline-primary" type="submit" tardet="_blank">PANIER</button>
@@ -56,10 +72,6 @@ if(!isset($_SESSION['actif']) || $_SESSION['actif']==0){?>
         
         <a href ="?p=favoris">
         <button class="btn btn-outline-primary" type="submit" tardet="_blank">FAVORIS</button>
-        </a>
-
-        <a href ="?p=account">
-        <button class="btn btn-outline-primary" type="submit" tardet="_blank">MON COMPTE</button>
         </a>
 
         <a href ="?p=home">

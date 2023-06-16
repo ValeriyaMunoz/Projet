@@ -13,9 +13,10 @@
     </div>
 <?php
  $id=$_SESSION['id'];
+ 
  $idAnnonce=$_GET['idAnnonce'];
  //print_r($idAnnonce);
- $_SESSION['idAnnonce']=$idAnnonce;
+ //$_SESSION['idAnnonce']=$idAnnonce;
 
 
  $annonce=new Annonce();
@@ -27,12 +28,16 @@ $annonce->chargerAnnonceById($idAnnonce);
  
  
     <h5>SUPPRESSION DE L'ANNONCE?</h5>
+   
        <p>Etes-vous sur de vouloir supprimer l'annonce <?php echo $annonce->getTitle(); ?></p>
-        <a href ="?p=oui_supprimer">
+       <form method="POST" action="" class="container">
+        <input type="hidden" name="action" value="oui_supprimer" >
+        <input type="hidden" name="idannonce" value="<?php echo $idAnnonce;?>">
         <button class="btn btn-outline-primary" type="submit" tardet="_blank">OUI</button>
-        </a>
+     </form>  
         <a href ="?p=non_supprimer">
         <button class="btn btn-outline-primary" type="submit" tardet="_blank">NON</button>
         </a>
+      
        
 

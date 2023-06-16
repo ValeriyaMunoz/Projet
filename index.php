@@ -40,6 +40,12 @@ try
       $action=$_POST['action']?? "";
       switch($action){
 
+          case 'oui_supprimer':
+          print_r($_POST);
+          $act=$annonce->SupprimerAnnonceOui($_POST['idannonce']); 
+          $page="mes_annonces";
+          break;
+        
           case 'supprimer_compte':
           $act=$user->SupprimerCompte();
           $page='deconnect';
@@ -55,7 +61,7 @@ try
           break;
 
           case 'cree_annonce':
-          $act=$annonce->CreeAnnonce();
+          $act=$annonce->CreeAnnonce($_POST['idannonce']);
           break;
 
           case 'login':
@@ -90,11 +96,7 @@ try
 if ($page=='non_supprimer'){
    $page="mes_annonces";
 }
-if ($page=='oui_supprimer'){
-   $idAnnonce=$_SESSION['idAnnonce'];
-  $act=$annonce->SupprimerAnnonceOui( $idAnnonce); 
-  $page="mes_annonces";
-}
+
 
  if ($page=='activation'){
   $act=$UserModel->activUser();

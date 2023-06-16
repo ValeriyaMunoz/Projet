@@ -185,6 +185,8 @@ try{
 
     //$db = connect();
       global $db;
+    $query=$db->prepare('DELETE FROM '.$this->table_photo.' WHERE idAnnonce=:idAnnonce');
+    $query->execute(['idAnnonce'=>$idAnnonce]); 
     $query=$db->prepare('DELETE FROM '.$this->table.' WHERE id=:id LIMIT 1');
     $query->execute(['id'=>$idAnnonce]); 
     
