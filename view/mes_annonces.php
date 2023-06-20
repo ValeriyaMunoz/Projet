@@ -52,7 +52,7 @@ $user->chargerAllInfoUserById($_SESSION['id']);
               $nb_statut=$annonce->getStatut_annonce_validee_bloque();
               $statut=$annonce->StatutAnnonce($nb_statut);   ?>
                <p>Statut de l'annonce:  <?php echo $statut ?? "à l'étude"; ?></p>
-            
+             <p class=""><?php echo "Ville: ".$annonce->getVille() ?></p>
          
             <form action="?p=modification_annonce" method= "get"> 
                <input type="hidden" name="p" value="modification_annonce">  

@@ -55,7 +55,18 @@ $annonce->chargerAnnonceById($idannonce);
 				
 		          </div>
 		      </div>
-			  
+			  		<div class="form-group">
+			  <div class="row">
+		         <div class="col-md-6">
+					<label for="categorie_annonce">Choisissez la catégorie</label>
+					<select name="categorie" id="categorie_annonce">
+					<option value="jeux">JOUET&JEUX</option>
+					<option value="habillement">HABILLEMENT</option>
+					<option value="maison">MAISON ET CUISINE</option>
+					<option value="electronique">ELECTRONIQUE</option>
+					</select>
+
+		   </div>
 		<div class="form-group">
 		          <div class="row">
 		         <div class="col-md-6">

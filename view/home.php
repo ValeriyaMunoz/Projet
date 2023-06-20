@@ -16,6 +16,7 @@
                 <img src="<?php echo "http://localhost/projet/".$annonce->getPhoto();?>" class="img_thumbnail">
                 <p class=""><?php echo $annonce->getDescription() ?></p>
                 <p class=""><?php echo "Prix: ".$annonce->getPrix() ?></p>
+                    <p class=""><?php echo "Ville: ".$annonce->getVille() ?></p>
             <form action="?p=annonce_detail" method= "get">
               <input type="hidden" name="p" value="annonce_detail">  
               <input type="hidden" name="id" value="<?php echo $annonce->getId();?>">

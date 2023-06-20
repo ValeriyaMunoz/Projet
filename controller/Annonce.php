@@ -17,6 +17,8 @@ class Annonce
   private $statut_echange_ou_paiement;
   private $Statut_annonce_validee_bloque;
   private $ville;
+  private $nom_categorie;
+  private $idCategorie;
 
 
   // Des functions getter et setter
@@ -26,6 +28,14 @@ class Annonce
   public function getStatut(){
     return $this->statut_echange_ou_paiement;
   }
+
+  public function getIdCategorie(){
+    return $this->idCategorie;
+  }
+ public function getCategorie(){
+    return $this->nom_categorie;
+  }
+
   public function getId(){
     return $this->id;
   }
@@ -65,6 +75,7 @@ class Annonce
     $this->title=$annonce[$num_annonce]['titre'];
     $this->description=$annonce[$num_annonce]['description'];
     $this->prix=$annonce[$num_annonce]['prix'];
+     $this->ville=$annonce[$num_annonce]['ville'];
     $this->Statut_annonce_validee_bloque=[$num_annonce]['Statut_annonce_validee_bloque'] ?? 4;
     $photo=$AnnonceModel->getMainPhoto($this->id);
     $this->photo=$photo['fichier_chemin'];
@@ -82,9 +93,11 @@ class Annonce
     $this->title=$annonce[$num_annonce]['titre'];
     $this->description=$annonce[$num_annonce]['description'];
     $this->prix=$annonce[$num_annonce]['prix'];
+    $this->ville=$annonce[$num_annonce]['ville'];
     $this->Statut_annonce_validee_bloque=$annonce[$num_annonce]['Statut_annonce_validee_bloque'];
     $this->photo[] = $AnnonceModel->getPhotobyId($this->id);
-   
+    //$categorie=$AnnonceModel->getCategorie($this->id);
+    //$this->categorie=$categorie['nom_categorie'];
    
     //ptint_r($photo);
  
@@ -121,11 +134,14 @@ public function StatutAnnonce($statut){
     $this->title=$annonce['titre'];
     $this->description=$annonce['description'];
     $this->prix=$annonce['prix'];
+     $this->ville=$annonce['ville'];
     $this->photo[] = $AnnonceModel->getPhotobyId($idannonce);
     $this->statut_echange_ou_paiement=$annonce['statut_echange_ou_paiement'];
     $this->Statut_annonce_validee_bloque=$annonce['Statut_annonce_validee_bloque'];
     $this->ville=$annonce['ville'];
     $this->statut_echange_ou_paiement=$annonce['statut_echange_ou_paiement'];
+     //$categorie=$AnnonceModel->getCategorie($this->id);
+    //$this->categorie=$categorie['nom_categorie'];
   }
 
 
@@ -156,13 +172,37 @@ if(!empty($_POST)){
                         $statut_echange_ou_paiement=0;
                         break;
                         }
+//print_r($_POST);
+                              $action_categorie=$_POST['categorie'];
+                              switch($action_categorie){
+
+                              case 'jeux':
+                              $nom_categorie="JOUET&JEUX";
+                              $idCategorie=1;
+                              break;
+
+                              case 'habillement':
+                              $nom_categorie="HABILLEMENT";
+                              $idCategorie=2;
+                              break;
+
+                               case 'maison':
+                              $nom_categorie="MAISON ET CUISINE";
+                              $idCategorie=3;
+                              break;
+
+                               case 'electronique':
+                              $nom_categorie="ELECTRONIQUE";
+                              $idCategorie=4;
+                              break;
+                              }
       
        $date_de_creation=date('Y-m-j H:i:s');
         //$date_de_creation=$datetime->date;
     
 
-        $idAnnonce=$AnnonceModel->creeNouvelleAnnonce($id,$titre,$description,$prix,$ville,$statut_echange_ou_paiement,$date_de_creation);
-
+        $idAnnonce=$AnnonceModel->creeNouvelleAnnonce($id,$titre,$description,$prix,$ville,$statut_echange_ou_paiement,$date_de_creation,$idCategorie);
+      
                         //print_r($_FILES);
                           if(isset($_FILES['file'])){
                             foreach($_FILES['file']['error'] as $k=>$error){
@@ -279,11 +319,41 @@ $this->chargerAnnonceById($idAnnonce);
              $statut_echange_ou_paiement=$this->getStatut();
              //print_r( $statut_echange_ou_paiement);
             }
-               
+            //print_r($_POST);
+                    if(!empty($_POST["categorie"])){
+                              $action_categorie=$_POST['categorie'];
+                              switch($action_categorie){
 
-  $nouvelle_annonce=$AnnonceModel->ModifierAnnonce($idAnnonce,$titre,$description,$prix, $ville,$statut_echange_ou_paiement);
-                       
-    if(isset($_FILES['file'])){
+                              case 'jeux':
+                              $nom_categorie="JOUET&JEUX";
+                              $idCategorie=1;
+                              break;
+
+                              case 'habillement':
+                              $nom_categorie="HABILLEMENT";
+                              $idCategorie=2;
+                              break;
+
+                               case 'maison':
+                              $nom_categorie="MAISON ET CUISINE";
+                              $idCategorie=3;
+                              break;
+
+                               case 'electronique':
+                              $nom_categorie="ELECTRONIQUE";
+                              $idCategorie=4;
+                              break;
+                              }
+                            }else{
+                              $idCategorie=$this->getIdCategorie();
+                            }  
+
+           
+
+
+  $nouvelle_annonce=$AnnonceModel->ModifierAnnonce($idAnnonce,$titre,$description,$prix, $ville,$statut_echange_ou_paiement,$idCategorie);
+                //print_r($_FILES['file']['name'][0]);       
+    if(filesize($_FILES['file']['name'][0])!=0 ){
      $deletePhoto=$AnnonceModel->DeleteLastPhoto($idAnnonce);
         foreach($_FILES['file']['error'] as $k=>$error){
         //Si le fichier a bien été téléchargé et qu'il n'y a pas eu d'erreur
@@ -308,19 +378,74 @@ $nouvelle_annonce_photo=$AnnonceModel->ModifierAnnoncePhoto($idAnnonce,$fichier_
   
             }else{ 
               $fichier_chemin=$this->getPhoto();
-              echo "suis";
               }
             }
       }else{
-            echo "Mauvais format de la photo téléchargée";
+         $fichier_chemin=$this->getPhoto();
+
       }
 
 }
 
 
+public function chargerAnnoncebyCategorie($idCategorie, $num_annonce){
+$AnnonceModel=new AnnonceModel();
+    $annonce=$AnnonceModel->getAnnoncebyCategorie($idCategorie);
+    $this->id=$annonce[$num_annonce]['id'];
+    $this->title=$annonce[$num_annonce]['titre'];
+    $this->description=$annonce[$num_annonce]['description'];
+    $this->prix=$annonce[$num_annonce]['prix'];
+    $this->Statut_annonce_validee_bloque=[$num_annonce]['Statut_annonce_validee_bloque'] ?? 4;
+    $photo=$AnnonceModel->getMainPhoto($this->id);
+    $this->photo=$photo['fichier_chemin'];
+    //$categorie=$AnnonceModel->getCategorie($this->id);
+    //$this->categorie=$categorie['nom_categorie'];
+}
+
+public function chargerAnnoncebyStatut($Statut_annonce_validee_bloque, $num_annonce){
+$AnnonceModel=new AnnonceModel();
+    $annonce=$AnnonceModel->getAnnoncebyStatut($Statut_annonce_validee_bloque);
+    $this->id=$annonce[$num_annonce]['id'];
+    $this->title=$annonce[$num_annonce]['titre'];
+    $this->description=$annonce[$num_annonce]['description'];
+    $this->prix=$annonce[$num_annonce]['prix'];
+    $this->ville=$annonce[$num_annonce]['ville'];
+    $this->Statut_annonce_validee_bloque=[$num_annonce]['Statut_annonce_validee_bloque'] ?? 4;
+    $photo=$AnnonceModel->getMainPhoto($this->id);
+    $this->photo=$photo['fichier_chemin'];
+    $categorie=$AnnonceModel->getCategorie($this->id);
+    $this->nom_categorie=$categorie;
+    //print_r($categorie);
+    //$this->categorie=$categorie['nom_categorie'];
+
+    
+}
 
 
+public function categories($idCategorie){
+    
+        switch($idCategorie){
 
+        case '1':
+        $nom_categorie="JOUET&JEUX";
+        break;
+
+        case '2':
+        $nom_categorie="HABILLEMENT";
+        break;
+
+          case '3':
+        $nom_categorie="MAISON ET CUISINE";
+        break;
+
+          case '4':
+        $nom_categorie="ELECTRONIQUE";
+        break;
+        }
+
+ return $nom_categorie;
+
+}
  /*public function testjson()
     {
         // si on souhaite gérer des appels AJAX, on peut directement renvoyer du JSON, sans avoir besoin d'une vue

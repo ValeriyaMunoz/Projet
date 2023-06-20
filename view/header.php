@@ -1,4 +1,7 @@
-
+<?php
+$user= new User();
+$user->chargerAllInfoUserById($_SESSION['id']);
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -62,18 +65,22 @@ if(!isset($_SESSION['actif']) || $_SESSION['actif']==0){?>
      <button class="btn btn-outline-primary" type="submit" tardet="_blank">ANNONCES</button>
      </a>
 
-<?php }else{?>
+<?php }else{
 
-    
+    if($user->getIsAdmin()==1){?>
+
+     <a href ="?p=admin">
+        <button class="btn btn-outline-primary" type="submit" tardet="_blank">ADMIN</button>
+        </a>
+
+    <?php 
+    }
+    ?>
 
         <a href ="?p=panier">
         <button class="btn btn-outline-primary" type="submit" tardet="_blank">PANIER</button>
         </a>
         
-        <a href ="?p=favoris">
-        <button class="btn btn-outline-primary" type="submit" tardet="_blank">FAVORIS</button>
-        </a>
-
         <a href ="?p=home">
         <button class="btn btn-outline-primary" type="submit" tardet="_blank">ANNONCES</button>
         </a>

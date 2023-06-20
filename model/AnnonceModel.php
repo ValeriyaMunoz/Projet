@@ -5,6 +5,7 @@
 class AnnonceModel{
   private $table='annonce';
   private $table_photo='photo';
+  private $table_cat='categorie';
 
  public function getAnnonce($orderby){
     try {
@@ -68,7 +69,7 @@ class AnnonceModel{
 
   //Affiche toutes les photos d'annonce.Utilise pour afficher les détails de l'annonce.
 
-public  function getPhotobyId($idannonce){
+public function getPhotobyId($idannonce){
       try {
         //$db = connect();
       global $db;
@@ -105,6 +106,26 @@ public  function getPhotobyId($idannonce){
     return false;
 
   }
+
+public function CountAnnonceCategorie($idCategorie){ 
+      try {
+        //$db = connect();
+      global $db;
+        $query=$db->prepare('SELECT COUNT(id) FROM '.$this->table.' WHERE idCategorie=:idCategorie');
+        $query->execute(['idCategorie'=>$idCategorie]);
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'Annonce
+            $result=$query->fetch();
+            return $result[0];
+
+        }
+      } catch (Exception $e) {
+        echo $e->getMessage();
+      }
+    return false;
+
+  }
+
 
   public function CountAnnoncebyID($idMembre){ 
       try {
@@ -146,14 +167,31 @@ try {
 
   
 }
- public function creeNouvelleAnnonce($idMembre,$titre,$description,$prix,$ville,$statut_echange_ou_paiement,$date_de_creation){
+
+public function creeNouvelCategorie($nom_categorie,$idAnnonce){
+
+    try{
+
+    //$db = connect();
+      global $db;
+    $query=$db->prepare('INSERT INTO '.$this->table_cat.' ( nom_categorie, idAnnonce) VALUES (:nom_categorie,:idAnnonce) ');
+    $query->execute(['nom_categorie'=>$nom_categorie, 'idAnnonce'=>$idAnnonce, ]); 
+    
+} catch (Exception $e) {
+  echo $e->getMessage();
+ }
+    return false;  
+}
+
+
+ public function creeNouvelleAnnonce($idMembre,$titre,$description,$prix,$ville,$statut_echange_ou_paiement,$date_de_creation,$idCategorie){
 
   try{
 
     //$db = connect();
       global $db;
-    $query=$db->prepare('INSERT INTO '.$this->table.' ( titre, description, prix, statut_echange_ou_paiement, ville, idMembre, date_de_creation) VALUES (:titre,:description,:prix,:statut_echange_ou_paiement,:ville,:idMembre,:date_de_creation) ');
-    $query->execute(['titre'=>$titre, 'description'=>$description, 'prix'=>$prix, 'ville'=>$ville, 'statut_echange_ou_paiement'=>$statut_echange_ou_paiement, 'idMembre'=>$idMembre, 'date_de_creation'=>$date_de_creation]); 
+    $query=$db->prepare('INSERT INTO '.$this->table.' ( titre, description, prix, statut_echange_ou_paiement, ville, idMembre, date_de_creation,idCategorie) VALUES (:titre,:description,:prix,:statut_echange_ou_paiement,:ville,:idMembre,:date_de_creation,:idCategorie) ');
+    $query->execute(['titre'=>$titre, 'description'=>$description, 'prix'=>$prix, 'ville'=>$ville, 'statut_echange_ou_paiement'=>$statut_echange_ou_paiement, 'idMembre'=>$idMembre, 'date_de_creation'=>$date_de_creation,'idCategorie'=>$idCategorie]); 
     $last_id=$db->lastInsertId();
     return $last_id;
     
@@ -201,6 +239,8 @@ public function MontrerCheminPhoto($idAnnonce){
 
     //$db = connect();
       global $db;
+    $query=$db->prepare('DELETE FROM '.$this->table_cat.' WHERE idAnnonce=:idAnnonce');
+    $query->execute(['idAnnonce'=>$idAnnonce]); 
     $query=$db->prepare('DELETE FROM '.$this->table_photo.' WHERE idAnnonce=:idAnnonce');
     $query->execute(['idAnnonce'=>$idAnnonce]); 
     $query=$db->prepare('DELETE FROM '.$this->table.' WHERE id=:id LIMIT 1');
@@ -213,14 +253,46 @@ public function MontrerCheminPhoto($idAnnonce){
 
 }
   
- public function ModifierAnnonce($idAnnonce,$titre,$description,$prix, $ville,$statut_echange_ou_paiement){
+public function getCategorie($idAnnonce){
+try{
+$annonce=new Annonce();
+    //$db = connect();
+      global $db;
+    $query=$db->prepare('SELECT idCategorie FROM '.$this->table.' WHERE id=:id');
+    $query->execute(['id'=>$idAnnonce]);
+    $result = $query->fetch();
+    $result=$annonce->categories($result['idCategorie']);
+    return $result;
+    
+} catch (Exception $e) {
+  echo $e->getMessage();
+ }
+    return false;  
+
+}
+
+public function ChangerCategorie($idAnnonce, $nom_categorie){
+try{
+      //$db = connect();
+        global $db;
+        $query=$db->prepare('UPDATE '.$this->table_cat.' SET idAnnonce=:idAnnonce, nom_categorie=:nom_categorie');
+        $query->execute(['idAnnonce'=>$idAnnonce, 'nom_categorie'=>$nom_categorie]); 
+        
+} catch (Exception $e) {
+        echo $e->getMessage();
+ }
+    return false;
+
+}
+
+ public function ModifierAnnonce($idAnnonce,$titre,$description,$prix, $ville,$statut_echange_ou_paiement, $idCategorie){
 
 try{
 
       //$db = connect();
         global $db;
-        $query=$db->prepare('UPDATE '.$this->table.' SET titre=:titre, description=:description, prix=:prix, ville=:ville, statut_echange_ou_paiement=:statut_echange_ou_paiement WHERE id=:id');
-        $query->execute(['titre'=>$titre, 'description'=>$description, 'prix'=>$prix, 'ville'=>$ville, 'statut_echange_ou_paiement'=>$statut_echange_ou_paiement, 'id'=>$idAnnonce]); 
+        $query=$db->prepare('UPDATE '.$this->table.' SET titre=:titre, description=:description, prix=:prix, ville=:ville, statut_echange_ou_paiement=:statut_echange_ou_paiement,idCategorie=:idCategorie WHERE id=:id');
+        $query->execute(['titre'=>$titre, 'description'=>$description, 'prix'=>$prix, 'ville'=>$ville, 'statut_echange_ou_paiement'=>$statut_echange_ou_paiement, 'id'=>$idAnnonce, 'idCategorie'=>$idCategorie]); 
         
 } catch (Exception $e) {
         echo $e->getMessage();
@@ -285,6 +357,64 @@ public function DeleteLastPhoto($idAnnonce){
 }
 
 
+
+public function getAnnoncebyCategorie($idCategorie){
+  //print_r($idCategorie);
+try {
+        //$db = connect();
+        global $db;
+        $query=$db->prepare('SELECT * FROM '. $this->table .' WHERE idCategorie=:idCategorie');
+        $query->execute(['idCategorie'=>$idCategorie]);
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'annonce
+
+            return $query->fetchAll();
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+    return false;
   }
+
+public function CountAnnonceStatus($Statut_annonce_validee_bloque){
+    try {
+    //$db = connect();
+  global $db;
+    $query=$db->prepare('SELECT COUNT(id) FROM '.$this->table.' WHERE Statut_annonce_validee_bloque=:Statut_annonce_validee_bloque');
+    $query->execute(['Statut_annonce_validee_bloque'=>$Statut_annonce_validee_bloque]);
+    if ($query->rowCount()){
+        // Renvoie toutes les infos de l'Annonce
+        $result=$query->fetch();
+        return $result[0];
+
+    }
+  } catch (Exception $e) {
+    echo $e->getMessage();
+  }
+return false;
+}
+
+public function getAnnoncebyStatut($Statut_annonce_validee_bloque){
+  //print_r($idCategorie);
+try {
+        //$db = connect();
+        global $db;
+        $query=$db->prepare('SELECT * FROM '. $this->table .' WHERE Statut_annonce_validee_bloque=:Statut_annonce_validee_bloque');
+        $query->execute(['Statut_annonce_validee_bloque'=>$Statut_annonce_validee_bloque]);
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'annonce
+
+            return $query->fetchAll();
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+    return false;
+
+  }
+
+}
+
+  
 
 

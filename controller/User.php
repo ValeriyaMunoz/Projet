@@ -31,11 +31,16 @@ class User
   private $montant_cagnotte;
   private $actif;
   private $ville;
+  private $is_admin;
 
 
   // Functions getter et setter
   public function getId(){
     return $this->id;
+  }
+
+   public function getIsAdmin(){
+    return $this->is_admin;
   }
     public function getUrl_photo_profil(){
     return $this->url_photo_profil;
@@ -183,6 +188,7 @@ public function getVille(){
   $this->actif=$user[0]['actif'];
   $this->ville=$user[0]['ville'];
   $this->url_photo_profil=$user[0]['url_photo_profil'];
+  $this->is_admin=$user[0]['is_admin'];
    //print_r($user[0]['url_photo_profil']);
   }
 

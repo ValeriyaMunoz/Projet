@@ -21,6 +21,7 @@ $photo = $annonce->getPhoto();
    
   <p class=""><?php echo $annonce->getDescription(); ?></p>
   <p class=""><?php echo "Prix: ".$annonce->getPrix()."€"; ?></p>
+   <p class=""><?php echo "Ville: ".$annonce->getVille() ?></p>
     <form action="" method= "get">
       <input type="hidden" name="idannonce" value="<?php echo $annonce->getId();?>">
       <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Acheter</button>

@@ -145,7 +145,19 @@ require "view/header.php";
             case "new_message":
             require_once "view/new_message.php"; 
             break;
+            
+            
+            case "admin":
+            require_once "view/admin.php"; 
+            break;
 
+            case "admin_annonces":
+            require_once "view/admin_annonces.php"; 
+            break;
+
+            case "admin_users":
+            require_once "view/admin_users.php"; 
+            break;
 
             case "connexion":
             require_once "view/connexion.php"; 
