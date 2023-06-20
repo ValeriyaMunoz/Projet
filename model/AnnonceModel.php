@@ -6,7 +6,7 @@ class AnnonceModel{
   private $table='annonce';
   private $table_photo='photo';
 
-  function getAnnonce($orderby){
+ public function getAnnonce($orderby){
     try {
         //$db = connect();
         global $db;
@@ -27,7 +27,7 @@ class AnnonceModel{
 
   //Affiche la photo principale de l'annonce par son ID
 
-  function getMainPhoto($idannonce){
+ public function getMainPhoto($idannonce){
       try {
       //$db = connect();
       global $db;
@@ -48,7 +48,7 @@ class AnnonceModel{
   //les détails de l'annonce
 
 
-  function getAnnoncebyId($idannonce){
+ public function getAnnoncebyId($idannonce){
     try {
         //$db = connect();
       global $db;
@@ -68,7 +68,7 @@ class AnnonceModel{
 
   //Affiche toutes les photos d'annonce.Utilise pour afficher les détails de l'annonce.
 
-  function getPhotobyId($idannonce){
+public  function getPhotobyId($idannonce){
       try {
         //$db = connect();
       global $db;
@@ -87,7 +87,7 @@ class AnnonceModel{
 
   }
 
-  function CountAnnonce(){ 
+  public function CountAnnonce(){ 
       try {
         //$db = connect();
       global $db;
@@ -106,7 +106,7 @@ class AnnonceModel{
 
   }
 
-  function CountAnnoncebyID($idMembre){ 
+  public function CountAnnoncebyID($idMembre){ 
       try {
         //$db = connect();
       global $db;
@@ -125,7 +125,7 @@ class AnnonceModel{
 
   }
 
-function getAnnoncebyIdUser($id,$orderby){
+public function getAnnoncebyIdUser($id,$orderby){
 
 try {
         //$db = connect();
@@ -146,7 +146,7 @@ try {
 
   
 }
-  function creeNouvelleAnnonce($idMembre,$titre,$description,$prix,$ville,$statut_echange_ou_paiement,$date_de_creation){
+ public function creeNouvelleAnnonce($idMembre,$titre,$description,$prix,$ville,$statut_echange_ou_paiement,$date_de_creation){
 
   try{
 
@@ -165,7 +165,7 @@ try {
 }
 
 //
-function creeNouvelleAnnoncePhoto($idAnnonce,$fichier_chemin,$is_main_photo){
+public function creeNouvelleAnnoncePhoto($idAnnonce,$fichier_chemin,$is_main_photo){
 
 try{
 
@@ -180,7 +180,23 @@ try{
     return false;  
 }
 
-  function SupprimerAnnonce($idAnnonce){
+public function MontrerCheminPhoto($idAnnonce){
+ try{
+
+    //$db = connect();
+      global $db;
+    $query=$db->prepare('SELECT fichier_chemin FROM '.$this->table_photo.' WHERE idAnnonce=:idAnnonce');
+    $query->execute(['idAnnonce'=>$idAnnonce]);
+    $result = $query->fetchAll();
+    return $result;
+    
+} catch (Exception $e) {
+  echo $e->getMessage();
+ }
+    return false;  
+}
+
+ public function SupprimerAnnonce($idAnnonce){
   try{
 
     //$db = connect();
@@ -197,7 +213,78 @@ try{
 
 }
   
-    
+ public function ModifierAnnonce($idAnnonce,$titre,$description,$prix, $ville,$statut_echange_ou_paiement){
+
+try{
+
+      //$db = connect();
+        global $db;
+        $query=$db->prepare('UPDATE '.$this->table.' SET titre=:titre, description=:description, prix=:prix, ville=:ville, statut_echange_ou_paiement=:statut_echange_ou_paiement WHERE id=:id');
+        $query->execute(['titre'=>$titre, 'description'=>$description, 'prix'=>$prix, 'ville'=>$ville, 'statut_echange_ou_paiement'=>$statut_echange_ou_paiement, 'id'=>$idAnnonce]); 
+        
+} catch (Exception $e) {
+        echo $e->getMessage();
+ }
+    return false;
+  } 
+
+public function ModifierAnnoncePhoto($idAnnonce,$fichier_chemin,$is_main_photo){
+ //var_dump($fichier_chemin);
+  //var_dump($idAnnonce);
+ // var_dump($is_main_photo);
+  try{
+
+
+      //$db = connect();
+        global $db;
+        $query=$db->prepare('INSERT INTO '.$this->table_photo.' (fichier_chemin, is_main_photo,idAnnonce) VALUES (:fichier_chemin,:is_main_photo,:idAnnonce)');
+        $query->execute(['fichier_chemin'=>$fichier_chemin, 'is_main_photo'=>$is_main_photo, 'idAnnonce'=>$idAnnonce]); 
+        
+} catch (Exception $e) {
+        echo $e->getMessage();
+ }
+    return false;
+  } 
+
+
+    public function CountPhotos($idAnnonce){ 
+      try {
+        //$db = connect();
+      global $db;
+        $query=$db->prepare('SELECT COUNT(id) FROM '.$this->table_photo.' WHERE idAnnonce=:idAnnonce');
+        $query->execute(['idAnnonce'=>$idAnnonce]);
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'Annonce
+            $result=$query->fetch();
+           // print_r( $result);
+            return $result[0];
+
+        }
+      } catch (Exception $e) {
+        echo $e->getMessage();
+      }
+    return false;
+
+  }
+
+public function DeleteLastPhoto($idAnnonce){
+   try {
+        //$db = connect();
+      global $db;
+        $query=$db->prepare('DELETE FROM '.$this->table_photo.' WHERE idAnnonce=:idAnnonce');
+        $query->execute(['idAnnonce'=>$idAnnonce]);
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'Annonce
+            $result=$query->fetch();
+      
+        }
+      } catch (Exception $e) {
+        echo $e->getMessage();
+      }
+    return false;
+}
+
+
   }
 
 

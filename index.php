@@ -40,8 +40,17 @@ try
       $action=$_POST['action']?? "";
       switch($action){
 
+          case 'modification_annonce':
+          //print_r($_POST);
+          $idannonce=$_POST['idAnnonce'];
+          $idUser=$_POST['idUser'];
+          $act=$annonce->ModificationAnnonce($idannonce,$idUser);
+          $page='mes_annonces';
+          break;
+
+
           case 'oui_supprimer':
-          print_r($_POST);
+          //print_r($_POST);
           $act=$annonce->SupprimerAnnonceOui($_POST['idannonce']); 
           $page="mes_annonces";
           break;

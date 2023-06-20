@@ -234,7 +234,7 @@ if(!empty($_POST)){
 }
 
 function modification_info_user(){
-    $id=$_SESSION['id'];
+    //$id=$_SESSION['id'];
     $user= new User();
     $user->chargerAllInfoUserById($id);
     $UserModel=new UserModel();

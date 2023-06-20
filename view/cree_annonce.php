@@ -56,7 +56,7 @@ $id=$_SESSION['id'];
 		
                   
                   <div class="col-md-6">
-                      <input id="statut"  type="radio" name="statut" value= "Vendre">Vendre
+                      <input id="statut"  type="radio" name="statut" value= "Vendre" checked>Vendre
                       <input id="statut"  type="radio" name="statut" value="Echange"> Echange
                 </div>
 

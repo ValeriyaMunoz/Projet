@@ -32,15 +32,18 @@ $user->chargerAllInfoUserById($_SESSION['id']);
         $annonce->chargerAnnonceUser($idMembre,"date_de_creation", $i);
         $photo=$annonce->getPhoto();
        
+       
     ?>
       <div class="grid-item">
         
               <h4 class="my-0 font-weight-normal"><?php echo $annonce->getTitle(); ?></h4>
               
                 <?php
+               
                 foreach($photo[$i] as $k=>$val){
                   echo "<img src=".$val[0]." class='img_thumbnail'>";
                 }
+            
                 ?>
                 
                 <p class=""><?php echo $annonce->getDescription() ?></p>
