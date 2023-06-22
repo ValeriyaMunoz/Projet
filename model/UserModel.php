@@ -291,6 +291,25 @@ function getPasswordbyID($id){
         return false;
 
 }
+public function CountUserForAdmin(){
+ try {
+        //$db = connect();
+      global $db;
+        $query=$db->prepare('SELECT COUNT(id) FROM '.$this->table.' LIMIT 10');
+        $query->execute();
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'Annonce
+            $result=$query->fetch();
+            return $result[0];
+
+        }
+      } catch (Exception $e) {
+        echo $e->getMessage();
+      }
+    return false;
+
+}
+
 }
 
 

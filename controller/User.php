@@ -169,6 +169,8 @@ public function getVille(){
     $actif=setVille($ville);
    
 }
+
+
   //chargement tous les info d'user by Id
   public function chargerAllInfoUserById($id){ 
   $UserModel= new UserModel();

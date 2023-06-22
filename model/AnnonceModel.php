@@ -6,14 +6,14 @@ class AnnonceModel{
   private $table='annonce';
   private $table_photo='photo';
   private $table_cat='categorie';
+  private $table_user='membre';
 
  public function getAnnonce($orderby){
+
     try {
-        //$db = connect();
+ 
         global $db;
-        /*$db->test();
-        die;*/
-        $query=$db->prepare('SELECT * FROM '. $this->table .' ORDER BY '.$orderby);
+        $query=$db->prepare('SELECT * FROM '. $this->table .' WHERE Statut_annonce_validee_bloque = 2 ORDER BY '.$orderby.' LIMIT 10');
         $query->execute();
         if ($query->rowCount()){
             // Renvoie toutes les infos de l'annonce
@@ -25,7 +25,40 @@ class AnnonceModel{
     }
     return false;
   }
+public function AdminShowAllAnnonces(){
+try {
+ 
+        global $db;
+        $query=$db->prepare('SELECT * FROM '. $this->table .'  LIMIT 10');
+        $query->execute();
+       
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'annonce
+        
+            return $query->fetchAll();
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+    return false;
 
+
+
+}
+  public function ajouterDateValidation($idAnnonce,$date_fin_annonce,$date_validation,$duree_publication){
+ try{
+
+    //$db = connect();
+      global $db;
+    $query=$db->prepare('UPDATE '.$this->table.' SET date_fin_annonce=:date_fin_annonce, date_validation=:date_validation, duree_publication=:duree_publication WHERE id=:id');
+    $query->execute(['date_fin_annonce'=>$date_fin_annonce, 'date_validation'=>$date_validation, 'duree_publication'=>$duree_publication,'id'=>$idAnnonce, ]); 
+    
+} catch (Exception $e) {
+  echo $e->getMessage();
+ }
+    return false;  
+
+  }
   //Affiche la photo principale de l'annonce par son ID
 
  public function getMainPhoto($idannonce){
@@ -53,7 +86,7 @@ class AnnonceModel{
     try {
         //$db = connect();
       global $db;
-        $query=$db->prepare('SELECT * FROM '.$this->table.' where id=:id');
+        $query=$db->prepare('SELECT * FROM '.$this->table.' where id=:id LIMIT 10' );
         $query->execute(['id'=>$idannonce]);
         if ($query->rowCount()){
             // Renvoie toutes les infos de l'Annonce
@@ -92,7 +125,25 @@ public function getPhotobyId($idannonce){
       try {
         //$db = connect();
       global $db;
-        $query=$db->prepare('SELECT COUNT(id) FROM '.$this->table.'');
+        $query=$db->prepare('SELECT COUNT(id) FROM '.$this->table.' WHERE Statut_annonce_validee_bloque = 2');
+        $query->execute();
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'Annonce
+            $result=$query->fetch();
+            return $result[0];
+
+        }
+      } catch (Exception $e) {
+        echo $e->getMessage();
+      }
+    return false;
+
+  }
+  public function CountAnnonceForAdmin(){ 
+      try {
+        //$db = connect();
+      global $db;
+        $query=$db->prepare('SELECT COUNT(id) FROM '.$this->table.' LIMIT 10');
         $query->execute();
         if ($query->rowCount()){
             // Renvoie toutes les infos de l'Annonce
@@ -234,7 +285,7 @@ public function MontrerCheminPhoto($idAnnonce){
     return false;  
 }
 
- public function SupprimerAnnonce($idAnnonce){
+ public function SupprimerAnnonce($idAnnonce, $idMembre){
   try{
 
     //$db = connect();
@@ -243,8 +294,8 @@ public function MontrerCheminPhoto($idAnnonce){
     $query->execute(['idAnnonce'=>$idAnnonce]); 
     $query=$db->prepare('DELETE FROM '.$this->table_photo.' WHERE idAnnonce=:idAnnonce');
     $query->execute(['idAnnonce'=>$idAnnonce]); 
-    $query=$db->prepare('DELETE FROM '.$this->table.' WHERE id=:id LIMIT 1');
-    $query->execute(['id'=>$idAnnonce]); 
+    $query=$db->prepare('DELETE FROM '.$this->table.' WHERE id=:id AND idMembre=:idMembre LIMIT 1');
+    $query->execute(['idMembre'=>$idMembre,'id'=>$idAnnonce]); 
     
 } catch (Exception $e) {
   echo $e->getMessage();
@@ -262,6 +313,24 @@ $annonce=new Annonce();
     $query->execute(['id'=>$idAnnonce]);
     $result = $query->fetch();
     $result=$annonce->categories($result['idCategorie']);
+    return $result;
+    
+} catch (Exception $e) {
+  echo $e->getMessage();
+ }
+    return false;  
+
+}
+
+public function getIdMembre($idAnnonce){
+try{
+$annonce=new Annonce();
+    //$db = connect();
+      global $db;
+    $query=$db->prepare('SELECT idMembre FROM '.$this->table.' WHERE id=:id');
+    $query->execute(['id'=>$idAnnonce]);
+    $result = $query->fetch();
+    $result=$annonce->categories($result['idMembre']);
     return $result;
     
 } catch (Exception $e) {
@@ -413,6 +482,53 @@ try {
 
   }
 
+public function adminModifierAnnoncebyIdAnnonce($idAnnonce,$Statut_annonce_validee_bloque){
+  try{
+
+        global $db;
+        $query=$db->prepare('UPDATE '.$this->table.' SET Statut_annonce_validee_bloque=:Statut_annonce_validee_bloque WHERE id=:id');
+        $query->execute(['Statut_annonce_validee_bloque'=>$Statut_annonce_validee_bloque, 'id'=>$idAnnonce]); 
+        
+} catch (Exception $e) {
+        echo $e->getMessage();
+ }
+    return false;
+
+}
+
+public function RecupererEmailUserbyIdAnnonce($idAnnonce){
+  try {
+        global $db;
+        $query=$db->prepare('SELECT email FROM '. $this->table_user .' AS u INNER JOIN '. $this->table .' AS a ON a.idMembre=u.id WHERE a.id=:a.id');
+        $query->execute(['a.id'=>$idAnnonce]);
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'annonce
+            print_r($query->rowCount());
+            return $query->fetch();
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+    return false;
+}
+
+public function getidMembrebyIDAnnonce($idannonce){
+ // print_r($idannonce);
+  try {
+        global $db;
+        $query=$db->prepare('SELECT idMembre FROM  '. $this->table .'  WHERE id=:id');
+        $query->execute(['id'=>$idannonce]);
+       
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'annonce
+            return $query->fetch();
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+    return false;
+
+}
 }
 
   

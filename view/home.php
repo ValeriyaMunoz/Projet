@@ -6,10 +6,15 @@
     $AnnonceModel=new AnnonceModel();
     $annonce=new Annonce();
     $nb_annonce = $AnnonceModel->CountAnnonce();
+    ?>
+     <div class="card mb-4 box-shadow-sm">
+     
+       <?php
+       
     for($i=0;$i<=$nb_annonce-1;$i++):
         $annonce->chargerAnnonce("date_de_creation", $i);
     ?>
-        <div class="card mb-4 box-shadow-sm">
+       
           <div class="card-header">
               <h4 class="my-0 font-weight-normal"><?php echo $annonce->getTitle(); ?></h4>
               <div class="card-body">
@@ -26,5 +31,6 @@
           </div>
 
         <?php endfor;?>
-        </div>
+        
+    </div>
 </div>

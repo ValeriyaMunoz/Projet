@@ -1,13 +1,14 @@
 <?php
 session_start();
 $title="Accueil";
-
+require_once "config.php";
 require_once "model/AnnonceModel.php";
 require_once "model/UserModel.php";
 require_once "model/Connect.php";
 require_once "controller/Annonce.php";
 require_once "controller/Message_admin.php";
 require_once "controller/User.php";
+
 
 
 
@@ -47,11 +48,35 @@ try
           $act=$annonce->ModificationAnnonce($idannonce,$idUser);
           $page='mes_annonces';
           break;
+          
+          case 'supprimer_account_admin':
+            //print_r($_POST["id"]);
+            $act=$user->adminSupprimerUser($_POST["id"]);
+            //$page='admin';
+            break;
+            
+           case 'admin_modifier':
+            //print_r($_POST["id"]);
+            $act=$annonce->adminModifierAnnonce($_POST["id"]);
+            //$page='admin';
+            break;
+            
+            case 'admin_valider':
+            //print_r($_POST["id"]);
+            $act=$annonce->adminValiderAnnonce($_POST["id"]);
+            $page='admin';
+            break;
 
+            case 'admin_bloquer':
+            //print_r($_POST["id"]);
+            $act=$annonce->adminBloquerAnnonce($_POST["id"]);
+            $page='admin';
+            break;
 
           case 'oui_supprimer':
           //print_r($_POST);
-          $act=$annonce->SupprimerAnnonceOui($_POST['idannonce']); 
+          $id=$_SESSION['id'];
+          $act=$annonce->SupprimerAnnonceOui($_POST['idannonce'],$id); 
           $page="mes_annonces";
           break;
         
@@ -146,10 +171,12 @@ require "view/header.php";
             require_once "view/new_message.php"; 
             break;
             
-            
+           
+
             case "admin":
             require_once "view/admin.php"; 
             break;
+
 
             case "admin_annonces":
             require_once "view/admin_annonces.php"; 
@@ -209,7 +236,6 @@ require "view/header.php";
             }else{
             require_once "view/connexion.php";
             }
-            
             break;
 
             case "categorie_jeux":

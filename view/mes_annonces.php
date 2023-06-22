@@ -24,6 +24,9 @@ $user->chargerAllInfoUserById($_SESSION['id']);
     </div>
   </div>
 </section>
+
+
+
 <div class="grid-container">
 <?php
    
@@ -34,18 +37,18 @@ $user->chargerAllInfoUserById($_SESSION['id']);
        
        
     ?>
+   
       <div class="grid-item">
-        
+         <div class="d-flex">
+            <div class="card mb-4 box-shadow-sm">
               <h4 class="my-0 font-weight-normal"><?php echo $annonce->getTitle(); ?></h4>
-              
                 <?php
-               
                 foreach($photo[$i] as $k=>$val){
                   echo "<img src=".$val[0]." class='img_thumbnail'>";
                 }
             
                 ?>
-                
+                 
                 <p class=""><?php echo $annonce->getDescription() ?></p>
                 <p class=""><?php echo "Prix: ".$annonce->getPrix() ?></p>
             <?php
@@ -65,9 +68,12 @@ $user->chargerAllInfoUserById($_SESSION['id']);
               <input type="hidden" name="idAnnonce" value="<?php echo $annonce->getId();?>">
               <button class="btn btn-outline-primary" type="submit" tardet="_blank">SUPPRIMER L'ANNONCE</button>
             </form>
-      </div>
-              
+         </div>
+  </div>
+           
         <?php endfor;?>
+             
+      </div>
 </div>
   
 

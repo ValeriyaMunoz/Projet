@@ -6,6 +6,14 @@
  * @param string $description Description de l annonce
  * @param float $prix Prix de l annonce
  * @param string $photo Chemin pour recuperer du photo de l annonce
+ * @param string $statut_echange_ou_paiement Montre le statut si c est l echange ou si c est pour vendre
+ * @param string $Statut_annonce_validee_bloque Montre statut de l annonce pour l utilisateur (1 -"If faut modifier"; 2-"Validée"; 3-"Bloqué"; 4-"En attente de validation";
+ * @param string $ville Nom de ville de l utilisateur
+ * @param string $nom_categorie Categorie de l annonce
+ * @param string $idCategorie id Categorie de l annonce
+ * @param string $date_de_creation de l annonce
+ * @param string $duree_publication Combien le temps l annonce va reste publiée
+ * @param string $date_validation par l administrateur
  */
 class Annonce
 {
@@ -19,14 +27,31 @@ class Annonce
   private $ville;
   private $nom_categorie;
   private $idCategorie;
+  private $date_de_creation;
+  private $duree_publication;
+  private $date_validation;
+  private $date_fin_annonce;
+
 
 
   // Des functions getter et setter
+   public function getDateValidation(){
+    return $this->date_validation;
+  }
+   public function getDureePublication(){
+    return $this->duree_publication;
+  }
    public function getStatut_annonce_validee_bloque(){
     return $this->Statut_annonce_validee_bloque;
   }
   public function getStatut(){
     return $this->statut_echange_ou_paiement;
+  }
+    public function getDateCreationAnnonce(){
+    return $this-> date_de_creation;
+  }
+     public function getDateFinAnnonce(){
+    return $this-> date_fin_annonce;
   }
 
   public function getIdCategorie(){
@@ -71,17 +96,42 @@ class Annonce
   public function chargerAnnonce($orderby, $num_annonce){
     $AnnonceModel=new AnnonceModel();
     $annonce=$AnnonceModel->getAnnonce($orderby);
-    $this->id=$annonce[$num_annonce]['id'];
-    $this->title=$annonce[$num_annonce]['titre'];
-    $this->description=$annonce[$num_annonce]['description'];
-    $this->prix=$annonce[$num_annonce]['prix'];
-     $this->ville=$annonce[$num_annonce]['ville'];
-    $this->Statut_annonce_validee_bloque=[$num_annonce]['Statut_annonce_validee_bloque'] ?? 4;
-    $photo=$AnnonceModel->getMainPhoto($this->id);
-    $this->photo=$photo['fichier_chemin'];
-   
+    //if($annonce && is_array($annonce) && isset($annonce[$num_annonce])){
+        //print_r($annonce);
+      $this->id=$annonce[$num_annonce]['id'];
+      $this->title=$annonce[$num_annonce]['titre'];
+      $this->description=$annonce[$num_annonce]['description'];
+      $this->prix=$annonce[$num_annonce]['prix'];
+      $this->ville=$annonce[$num_annonce]['ville'];
+      $this->Statut_annonce_validee_bloque=[$num_annonce]['Statut_annonce_validee_bloque'] ?? 4;
+      $photo=$AnnonceModel->getMainPhoto($this->id);
+      $this->photo=$photo['fichier_chemin'];
+    //}
     //ptint_r($photo);
  
+  }
+// Afficher tous les annonces pour l admin
+  public function showAllAnnonces($num_annonce){
+  $AnnonceModel=new AnnonceModel();
+  $annonce=new Annonce();
+  $showAnnonces= $AnnonceModel->AdminShowAllAnnonces();
+  //var_dump($showAnnonces);
+  if(isset($showAnnonces)&& $showAnnonces && is_array($showAnnonces)){
+    $this->id=$showAnnonces[$num_annonce]['id'];
+    $this->title=$showAnnonces[$num_annonce]['titre'];
+    $this->description=$showAnnonces[$num_annonce]['description'];
+    $this->prix=$showAnnonces[$num_annonce]['prix'];
+     $this->ville=$showAnnonces[$num_annonce]['ville'];
+    $this->photo[] = $AnnonceModel->getPhotobyId($this->id);
+    $this->statut_echange_ou_paiement=$showAnnonces[$num_annonce]['statut_echange_ou_paiement'];
+    $this->Statut_annonce_validee_bloque=$showAnnonces[$num_annonce]['Statut_annonce_validee_bloque'];
+    $this->vildate_de_creationle=$showAnnonces[$num_annonce]['date_de_creation'];
+    $this->date_fin_annonce=$showAnnonces[$num_annonce]['date_fin_annonce'];
+    $this->duree_publication=$showAnnonces[$num_annonce]['duree_publication'];
+    $this->date_validation=$showAnnonces[$num_annonce]['date_validation'];
+     $this->idcategorie=$AnnonceModel->getCategorie($this->id);
+    $this->idmembre=$AnnonceModel->getidMembrebyIDAnnonce($this->id);
+  }
   }
 // charger des annonce user dans la page Mes Annonce
     public function chargerAnnonceUser($id,$orderby, $num_annonce){
@@ -256,14 +306,14 @@ if(!empty($_POST)){
 }
 
 
-public function SupprimerAnnonceOui($idAnnonce){
+public function SupprimerAnnonceOui($idAnnonce,$idUser){
 $AnnonceModel=new AnnonceModel();
 $photosServer[]=$AnnonceModel->MontrerCheminPhoto($idAnnonce);
  foreach($photosServer[0] as $k=>$val){
   $filename=$photosServer[0][$k][0];
   unlink($filename);
  }
-$AnnonceModel->SupprimerAnnonce($idAnnonce);
+$AnnonceModel->SupprimerAnnonce($idAnnonce,$idUser);
 
 }
 
@@ -444,6 +494,67 @@ public function categories($idCategorie){
         }
 
  return $nom_categorie;
+
+}
+
+public function adminModifierAnnonce($idAnnonce){
+  $Statut_annonce_validee_bloque=1;
+  $AnnonceModel=new AnnonceModel();
+  $admin_modifier=$AnnonceModel->adminModifierAnnoncebyIdAnnonce($idAnnonce, $Statut_annonce_validee_bloque);
+  $from="admin@lm.com";
+                  //print_r($from);
+          $EmailUser=$AnnonceModel->RecupererEmailUserbyIdAnnonce($idAnnonce);
+                $to=$EmailUser;
+                $subject="";
+                $headers=array('From:'=> $from,
+                'MIME6Version'=>'1.0',
+                'Content-type'=>'text/html;charset=utf-8',
+                'Reply-To:'=> $to,
+                'X-Mailer'=>' PHP/' . phpversion());
+                $message= "Vous avez publié une annonce sur notre site Web ". NAME_SITE." Votre annonce a été renvoyée pour révision. Cela peut signifier que certains champs ne correspondent pas à votre annonce.";
+                $mail=mail($to,$subject,$message,$headers);
+  
+}
+
+public function adminValiderAnnonce($idAnnonce){
+ $Statut_annonce_validee_bloque=2;
+  $AnnonceModel=new AnnonceModel();
+  $admin_valider=$AnnonceModel->adminModifierAnnoncebyIdAnnonce($idAnnonce, $Statut_annonce_validee_bloque);
+  $from="admin@lm.com";
+                  //print_r($from);
+          $EmailUser=$AnnonceModel->RecupererEmailUserbyIdAnnonce($idAnnonce);
+                $to=$EmailUser;
+                $subject="";
+                $headers=array('From:'=> $from,
+                'MIME6Version'=>'1.0',
+                'Content-type'=>'text/html;charset=utf-8',
+                'Reply-To:'=> $to,
+                'X-Mailer'=>' PHP/' . phpversion());
+                $message= "Vous avez publié une annonce sur notre site Web ". NAME_SITE." Votre annonce a été validée.";
+                $mail=mail($to,$subject,$message,$headers);
+  $date_fin_annonce=date('Y-m-j',strtotime('+30 days'));
+  $date_validation=date('Y-m-j H:i:s');
+  $duree_publication=30;
+
+  $date_validation=$AnnonceModel->ajouterDateValidation($idAnnonce,$date_fin_annonce,$date_validation,$duree_publication);
+}
+
+public function adminBloquerAnnonce($idAnnonce){
+   $Statut_annonce_validee_bloque=3;
+     $AnnonceModel=new AnnonceModel();
+  $admin_bloquer=$AnnonceModel->adminModifierAnnoncebyIdAnnonce($idAnnonce, $Statut_annonce_validee_bloque);
+  $from="admin@lm.com";
+                  //print_r($from);
+          $EmailUser=$AnnonceModel->RecupererEmailUserbyIdAnnonce($idAnnonce);
+                $to=$EmailUser;
+                $subject="";
+                $headers=array('From:'=> $from,
+                'MIME6Version'=>'1.0',
+                'Content-type'=>'text/html;charset=utf-8',
+                'Reply-To:'=> $to,
+                'X-Mailer'=>' PHP/' . phpversion());
+                $message= "Vous avez publié une annonce sur notre site Web ". NAME_SITE." Votre annonce a été bloquée. Il peut contenir du contenu interdit. Consultez nos politiques";
+                $mail=mail($to,$subject,$message,$headers);
 
 }
  /*public function testjson()
