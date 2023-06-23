@@ -3,7 +3,7 @@
  $UserModel=new UserModel();
  $user=new User();
  $nb_user = $UserModel->CountUserForAdmin();
-  //var_dump($annonce);
+  //var_dump($nb_user);
  //$show_annonce=$annonce->showAllAnnonces();
 
 ?>
@@ -51,22 +51,33 @@
                  
                 <tr>
                 <td><?= $user->getId();?></td>
-                <td><?= htmlentities($annonce->getTitle()); ?></td>
-                <td><?= htmlentities($annonce->getDescription()); ?></td>
+                <td><?= htmlentities($user->getNom()); ?></td>
+                <td><?= htmlentities($user->getPrenom()); ?></td>
+                <td><?= htmlentities($user->getAdresse()); ?></td>
+                <td><?= htmlentities($user->getEmail()); ?></td>
+                <td><?= htmlentities($user->getCodePostale()); ?></td>
+                <td><?= htmlentities($user->getTelephone()); ?></td>
+                <td><?= htmlentities($user->getUsername()); ?></td>
+                <td><?= htmlentities($user->getDateNaissance()); ?></td>
+                <td><?= $user->getUrl_photo_profil(); ?></td>
+                <td><?= $user->getMontant_cagnotte(); ?></td>
+                <td><?= $user->getActif(); ?></td>
+                <td><?= htmlentities($user->getVille()); ?></td>
+                <td><?= $user->getIsAdmin(); ?></td>
                 
                 <div class='row'>
                  <div class='col'>
                      <td>
-                         <form action="?p=modification_annonce" method= "get"> 
-               <input type="hidden" name="p" value="modification_annonce">  
-              <input type="hidden" name="idAnnonce" value="<?php echo $annonce->getId();?>">
-              <button class="btn btn-outline-primary" type="submit" tardet="_blank">Modifier</abutton>
-                 </form>
-                         <form action="?p=supprimer_account_admin" method= "get"> 
-               <input type="hidden" name="p" value="supprimer_account_admin">  
+               <form action="?p=modification_user_admin" method= "get">       
+               <input type="hidden" name="p" value="modification_user_admin">  
               <input type="hidden" name="idUser" value="<?php echo $user->getId();?>">
-                         <button class="btn btn-outline-primary" type="submit" tardet="_blank">Supprimer</button></td>
-                        </form>
+              <button class="btn btn-outline-primary" type="submit" tardet="_blank">Modifier</button>
+            </form>
+                <form action="?p=supprimer_account_admin" method= "get">       
+               <input type="hidden" name="p" value="supprimer_account_admin">  
+                <input type="hidden" name="idUser" value="<?php echo $user->getId();?>">
+               <button class="btn btn-outline-primary" type="submit" tardet="_blank">Supprimer</button></td>
+                </form>      
                     </td>
                 </tr>
                  </div>

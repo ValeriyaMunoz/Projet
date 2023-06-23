@@ -169,7 +169,28 @@ public function getVille(){
     $actif=setVille($ville);
    
 }
+public function showAllUser($num_user){
+  //print_r($num_user);
+$UserModel= new UserModel();
+  $user=$UserModel->showUsers();
+  //var_dump($user);
+  $this->id=$user[$num_user]['id'];
+  $this->nom=$user[$num_user]['nom'];
+  $this->prenom=$user[$num_user]['prenom'];
+  $this->adresse=$user[$num_user]['adresse'];
+  $this->email=$user[$num_user]['email'];
+  $this->code_postale=$user[$num_user]['code_postale'];
+  $this->telephone=$user[$num_user]['telephone'];
+  $this->password=$user[$num_user]['hash'];
+  $this->username=$user[$num_user]['username'];
+  $this->date_naissance=$user[$num_user]['date_naissance'];
+  $this->montant_cagnotte=$user[$num_user]['montant_cagnotte'];
+  $this->actif=$user[$num_user]['actif'];
+  $this->ville=$user[$num_user]['ville'];
+  $this->url_photo_profil=$user[$num_user]['url_photo_profil'];
+  $this->is_admin=$user[$num_user]['is_admin'];
 
+}
 
   //chargement tous les info d'user by Id
   public function chargerAllInfoUserById($id){ 
@@ -241,14 +262,15 @@ if(!empty($_POST)){
     }
 }
 
-function modification_info_user(){
+public function modification_info_user($id){
     //$id=$_SESSION['id'];
     $user= new User();
     $user->chargerAllInfoUserById($id);
     $UserModel=new UserModel();
     
      // Changer Avatar
-if(isset($_FILES['url_photo_profil'])){
+     //var_dump($_FILES);
+ if(filesize($_FILES['url_photo_profil']['name'])>0){
         
     //print_r($_FILES);
         //Si le fichier a bien été téléchargé et qu'il n'y a pas eu d'erreur
@@ -359,9 +381,42 @@ if(isset($_FILES['url_photo_profil'])){
         }else{
             $ville=$user->getVille();
         }
-    
+   
     $setInfoUser=$UserModel->setModificationUserById($id, $nom, $prenom, $username, $adresse, $email, $code_postale, $telephone, $date_naissance, $ville, $url_photo_profil); 
+    
+    // Verification si c est l Admin pour avoir access pour changer cette information
+    $idAdmin=$_SESSION['id'];
+    $userAdmin= new User();
+    $userAdmin->chargerAllInfoUserById($idAdmin);
+  
+    if($userAdmin->getIsAdmin()==1){
+   //print_r($_POST);
+           if(!empty($_POST["montant_cagnotte"]) && ($_POST["montant_cagnotte"])>=0){
+                $montant_cagnotte=htmlentities($_POST["montant_cagnotte"]);
+          
+            }else{
+                $montant_cagnotte=$user->getMontant_cagnotte();
+            }
 
+             if(is_numeric ($_POST["actif"])){
+                 $actif=htmlentities($_POST["actif"]);
+            echo "je";
+            }else{
+                $actif=$user->getActif();
+                echo "suis";
+            }
+
+             if(is_numeric ($_POST["is_admin"])){
+                $is_admin=htmlentities($_POST["is_admin"]);
+           
+            }else{
+                $is_admin=$user->getIsAdmin();
+            }
+
+    $changesOfAdmin=$UserModel->adminModificationUser($id,$montant_cagnotte, $actif,$is_admin);
+
+    }
+    
 }
 
 
@@ -396,4 +451,10 @@ function BonjourUser($nom, $prenom){
  echo "Bonjour, ".$this->nom." ".$this->prenom;
 }
 
+
+public function adminSupprimerUser($id){
+$UserModel=new UserModel();
+//print_r($id);
+$supprimer=$UserModel->SupprimerUserByID($id);
+}
   }

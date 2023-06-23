@@ -2,6 +2,8 @@
 class UserModel{
 
     private $table = 'membre';
+    private $table_photo= 'photo';
+    private $table_annonce= 'annonce';
 //Extraction toutes les informations d user
 function getuser(){
     try {
@@ -239,8 +241,23 @@ function activUser(){
         echo "Lien invalide";
     }
 }
- 
-function setModificationUserById($id,$nom, $prenom, $username, $adresse, $email,$code_postale, $telephone, $date_naissance, $ville, $url_photo_profil){
+ public function adminModificationUser($id, $montant_cagnotte, $actif, $is_admin){
+    //print_r($actif);
+    try{
+
+      //$db = connect();
+        global $db;
+    $query=$db->prepare('UPDATE '.$this->table.' SET montant_cagnotte=:montant_cagnotte, actif=:actif, is_admin=:is_admin WHERE id=:id');
+    $query->execute(['montant_cagnotte'=>$montant_cagnotte, 'actif'=>$actif, 'is_admin'=>$is_admin, 'id'=>$id]); 
+    
+} catch (Exception $e) {
+  echo $e->getMessage();
+ }
+    return false;
+ }
+
+
+public function setModificationUserById($id, $nom, $prenom, $username, $adresse, $email,$code_postale, $telephone, $date_naissance, $ville, $url_photo_profil){
 
 try{
 
@@ -255,15 +272,17 @@ try{
     return false;
 }
 
-function SupprimerUserByID($id){
 
+function SupprimerUserByID($id){
+//print_r("test".$id);
 try{
 
       //$db = connect();
         global $db;
-    $query=$db->prepare('DELETE FROM '.$this->table.' WHERE id=:id LIMIT 1');
+
+    $query=$db->prepare('DELETE m, a, ph FROM '.$this->table.' AS m LEFT JOIN '. $this->table_annonce .' AS a ON a.idMembre = m.id LEFT JOIN '. $this->table_photo .' AS ph ON a.id = ph.idAnnonce WHERE m.id = :id');
     $query->execute(['id'=>$id]); 
-    
+   var_dump( $query);
 } catch (Exception $e) {
   echo $e->getMessage();
  }
@@ -309,7 +328,24 @@ public function CountUserForAdmin(){
     return false;
 
 }
+public function showUsers(){
+try {
+        global $db;
+        $query=$db->prepare('SELECT * FROM '.$this->table.' LIMIT 10');
+        $query->execute(); 
+        if ($query->rowCount()){
+            // Renvoie toutes les infos de l'utilisateur
+         
+            return $query->fetchAll();
+           
+        }
+        
+    } catch (Exception $e) {
+    echo $e->getMessage();
+    }
+        return false;
 
+}
 }
 
 

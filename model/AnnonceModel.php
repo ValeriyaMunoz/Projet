@@ -499,8 +499,8 @@ public function adminModifierAnnoncebyIdAnnonce($idAnnonce,$Statut_annonce_valid
 public function RecupererEmailUserbyIdAnnonce($idAnnonce){
   try {
         global $db;
-        $query=$db->prepare('SELECT email FROM '. $this->table_user .' AS u INNER JOIN '. $this->table .' AS a ON a.idMembre=u.id WHERE a.id=:a.id');
-        $query->execute(['a.id'=>$idAnnonce]);
+        $query=$db->prepare('SELECT email FROM '. $this->table_user .' AS u INNER JOIN '. $this->table .' AS a ON a.idMembre=u.id WHERE a.id=:id');
+        $query->execute(['id'=>$idAnnonce]);
         if ($query->rowCount()){
             // Renvoie toutes les infos de l'annonce
             print_r($query->rowCount());

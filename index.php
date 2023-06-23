@@ -48,13 +48,24 @@ try
           $act=$annonce->ModificationAnnonce($idannonce,$idUser);
           $page='mes_annonces';
           break;
-          
+
+           case 'oui_supprimer_admin':
+            //print_r($_POST["idUser"]);
+            $act=$user->adminSupprimerUser($_POST["idUser"]);
+           $page='admin_users';
+            break;
+
+            case 'modifier_user_admin':
+            //print_r($_POST["id"]);
+            $act=$user->modification_info_user($_POST["id"]);
+           // $page='modification_user_admin';
+            break;
           case 'supprimer_account_admin':
             //print_r($_POST["id"]);
             $act=$user->adminSupprimerUser($_POST["id"]);
-            //$page='admin';
+            //$page='supprimer_account_admin';
             break;
-            
+
            case 'admin_modifier':
             //print_r($_POST["id"]);
             $act=$annonce->adminModifierAnnonce($_POST["id"]);
@@ -86,7 +97,8 @@ try
           break;
 
           case 'modification_info_user':
-          $act=$user->modification_info_user();
+          $id=$_SESSION['id'];
+          $act=$user->modification_info_user($id);
           $page='modification_info';
           break;
         
@@ -171,7 +183,13 @@ require "view/header.php";
             require_once "view/new_message.php"; 
             break;
             
-           
+            case "modification_user_admin":
+            require_once "view/modification_user_admin.php"; 
+            break;
+
+            case "supprimer_account_admin":
+            require_once "view/supprimer_account_admin.php"; 
+            break;
 
             case "admin":
             require_once "view/admin.php"; 
